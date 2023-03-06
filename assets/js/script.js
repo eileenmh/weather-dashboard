@@ -1,32 +1,39 @@
 // TODO: Add in ability to choose from a list of cities, ex: London US vs London UK
+const apiKey = "6aa641400e3e28191b162c454ad4f43e";
+
+function fetchCoordinatesUrl(city) {
+  url =
+    "http://api.openweathermap.org/geo/1.0/direct?q=" +
+    city +
+    "&APPID=" +
+    apiKey;
+  return url;
+}
+
+function fetchForecastUrl(latitude, longitude) {
+  var url =
+    "http://api.openweathermap.org/data/2.5/forecast?lat=" +
+    latitude +
+    "&lon=" +
+    longitude +
+    "&APPID=" +
+    apiKey;
+  return url;
+}
 
 function City(latitude, longitude) {
   this.latitude = latitude;
   this.longitude = longitude;
 }
 
-$("#city-search-btn").click(test);
-
 function test(event) {
   event.preventDefault();
-  var city = $("#city-entry").val();
-  console.log(city);
-  var requestUrl =
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
-    city +
-    "&APPID=6aa641400e3e28191b162c454ad4f43e";
-  fetch(requestUrl)
+  fetch(fetchCoordinatesUrl($("#city-entry").val()))
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      var requestUrl =
-        "http://api.openweathermap.org/data/2.5/forecast?lat=" +
-        data[0].lat +
-        "&lon=" +
-        data[0].lon +
-        "&APPID=6aa641400e3e28191b162c454ad4f43e";
-      fetch(requestUrl)
+      fetch(fetchForecastUrl(data[0].lat, data[0].lon))
         .then(function (response) {
           return response.json();
         })
@@ -35,3 +42,5 @@ function test(event) {
         });
     });
 }
+
+$("#city-search-btn").click(test);

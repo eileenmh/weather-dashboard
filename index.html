@@ -20,8 +20,13 @@
 
                 <form>
                     <label for="city-entry">Search for a city:</label>
-                    <input type="text" id="city-entry" name="city-entry" required>
-                    <button type="submit">Search</button>
+                    <input type="text" id="city-entry" name="city-entry" required list="cities">
+                    <datalist id="cities">
+                        <!-- <option value="London, US"></option>
+                        <option value="London, UK"></option> -->
+
+                    </datalist>
+                    <button type="submit" id="city-search-btn">Search</button>
                 </form>
 
             </section>
@@ -39,6 +44,9 @@
                         <h3>5-Day Forecast:</h3>
                         <div class="day">
                             <h4>Day 1</h4>
+                            <p><b>Temperature:</b></p>
+                            <p><b>Wind:</b></p>
+                            <p><b>Humidity:</b></p>
                         </div>
                         <div class="day">
                             <h4>Day 2</h4>
@@ -57,7 +65,11 @@
             </div>
 
         </main>
-        
+        <script
+            src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+            crossorigin="anonymous">
+        </script>
         <script src="./assets/js/script.js"></script>
     </body>
 </html>
