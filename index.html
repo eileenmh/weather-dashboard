@@ -17,20 +17,15 @@
 
         <main>
             <div class="columns m-2">
-            <section class="column is-one-quarter" id="location-container">
+            <section class="column is-one-quarter pt-0" id="location-container">
                     <label for="city-entry" class="label">Search for a city:</label>
                 <div class="field has-addons">
                     <div class="control is-expanded">
-                        <input class="input is-fullwidth" type="text" id="city-entry" name="city-entry" required list="cities">
+                        <input list="location-options" class="input is-fullwidth" type="text" id="location-search" name="city-entry">
                     </div>
-                    <div class="control">
-                    <button type="submit" id="city-search-btn" class="button">Search</button>
+                    <datalist id="location-options">
+                    </datalist>
                 </div>
-                </div>
-                <datalist id="cities">
-                    <!-- <option value="London, US"></option>
-                    <option value="London, UK"></option> -->
-                </datalist>
             </section>
 
             <div class="column has-background-white-ter m-1" id="weather-container">
