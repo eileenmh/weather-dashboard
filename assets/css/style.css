@@ -1,0 +1,20 @@
+#weather-container {
+    border: gray solid 2px;
+    border-radius: 12px;
+}
+
+.day {
+    background-color: lightgray;
+    border-radius: 12px;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+.day:not(:last-of-type) {
+    margin-right: 8px;
+}
+
+.day > h4 {
+    font-weight: 800;
+    font-size: 1.1rem;
+}

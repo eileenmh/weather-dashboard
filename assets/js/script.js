@@ -26,21 +26,25 @@ function City(latitude, longitude) {
   this.longitude = longitude;
 }
 
-function test(event) {
+function getCoordinates(event) {
   event.preventDefault();
   fetch(fetchCoordinatesUrl($("#city-entry").val()))
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      fetch(fetchForecastUrl(data[0].lat, data[0].lon))
-        .then(function (response) {
-          return response.json();
-        })
-        .then(function (data) {
-          console.log(data);
-        });
+      getWeather(data);
     });
 }
 
-$("#city-search-btn").click(test);
+function getWeather(data) {
+  fetch(fetchForecastUrl(data[0].lat, data[0].lon))
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+    });
+}
+
+$("#city-search-btn").click(getCoordinates);

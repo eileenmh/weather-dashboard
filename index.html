@@ -5,65 +5,74 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link rel="stylesheet" href="assets/css/style.css">
     </head>
 
     <body>
 
-        <header>
-            <h1>Weather Dashboard</h1>
+        <header class="has-background-info-dark p-5 mb-5">
+            <h1 class="title is-1 has-text-centered has-text-white">Weather Dashboard</h1>
         </header>
 
         <main>
-            <section>
-
-                <h2>Search for a city:</h2>
-
-                <form>
-                    <label for="city-entry">Search for a city:</label>
-                    <input type="text" id="city-entry" name="city-entry" required list="cities">
-                    <datalist id="cities">
-                        <!-- <option value="London, US"></option>
-                        <option value="London, UK"></option> -->
-
-                    </datalist>
-                    <button type="submit" id="city-search-btn">Search</button>
-                </form>
-
+            <div class="columns m-2">
+            <section class="column is-one-quarter" id="location-container">
+                    <label for="city-entry" class="label">Search for a city:</label>
+                <div class="field has-addons">
+                    <div class="control is-expanded">
+                        <input class="input is-fullwidth" type="text" id="city-entry" name="city-entry" required list="cities">
+                    </div>
+                    <div class="control">
+                    <button type="submit" id="city-search-btn" class="button">Search</button>
+                </div>
+                </div>
+                <datalist id="cities">
+                    <!-- <option value="London, US"></option>
+                    <option value="London, UK"></option> -->
+                </datalist>
             </section>
 
-            <div>
-
+            <div class="column has-background-white-ter m-1" id="weather-container">
                 <section>
-                        <h3>[[Location]]</h3>
+                        <div class="is-flex
+                        is-align-items-flex-end mb-3">
+                            <h2 class="title is-size-3-desktop is-size-5-mobile m-0 is-underlined mr-2">Durham, NC</h2>
+                            <p>As of 12:37am EDT</p>
+                        </div>
                         <p><b>Temperature:</b></p>
                         <p><b>Wind:</b></p>
                         <p><b>Humidity:</b></p>
                 </section>
 
                 <section>
-                        <h3>5-Day Forecast:</h3>
-                        <div class="day">
-                            <h4>Day 1</h4>
-                            <p><b>Temperature:</b></p>
-                            <p><b>Wind:</b></p>
-                            <p><b>Humidity:</b></p>
-                        </div>
-                        <div class="day">
-                            <h4>Day 2</h4>
-                        </div>
-                        <div class="day">
-                            <h4>Day 3</h4>
-                        </div>
-                        <div class="day">
-                            <h4>Day 4</h4>
-                        </div>
-                        <div class="day">
-                            <h4>Day 5</h4>
+                        <h3 class="title is-size-5-desktop is-size-6-mobile m-0 mr-2 mt-6">5-Day Forecast</h3>
+                        <div class="is-flex 
+                        is-justify-content-space-between is-flex-wrap-wrap mt-2">
+                            <div class="day is-flex-grow-1">
+                                <h4>Day 1</h4>
+                                <p>Temperature:</p>
+                            </div>
+                            <div class="day is-flex-grow-1">
+                                <h4>Day 2</h4>
+                                <p>Temperature:</p>
+                            </div>
+                            <div class="day is-flex-grow-1">
+                                <h4>Day 3</h4>
+                                <p>Temperature:</p>
+                            </div>
+                            <div class="day is-flex-grow-1">
+                                <h4>Day 4</h4>
+                                <p>Temperature:</p>
+                            </div>
+                            <div class="day is-flex-grow-1">
+                                <h4>Day 5</h4>
+                                <p>Temperature:</p>
+                            </div>
                         </div>
                 </section>
-
             </div>
-
+            </div>
         </main>
         <script
             src="https://code.jquery.com/jquery-3.6.3.min.js"
