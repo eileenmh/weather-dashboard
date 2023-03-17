@@ -6,13 +6,17 @@ function fetchCityResults(searchTerm) {
     return response.json();
   });
 }
-
-// Event listener on search input change
+/* SEARCH LOCATION
+ */
+// Event listener on location search input
 $("#location-search").on("input", function () {
-  inputValue = $(this).val();
+  let inputValue = $(this).val();
+  let optionsList = $("#location-options");
+
   if (inputValue.length > 2) {
     fetchCityResults(inputValue).then(function (data) {
-      console.log(data);
+      // clear options in datalist
+      optionsList.empty();
       for (let i = 0; i < data.length; i++) {
         createSearchOption(
           data[i].name,
@@ -24,12 +28,25 @@ $("#location-search").on("input", function () {
       }
     });
   }
+  if ($(optionsList).children().length > 0) {
+    let options = $(optionsList).children();
+    for (let i = 0; i < $(options).length; i++) {
+      let currentOption = $(options)[i];
+      if ($(currentOption).attr("value") === inputValue) {
+        console.log("We found a match!");
+      }
+    }
+  }
 });
 
 function createSearchOption(name, state, country, latitude, longitude) {
   let option = `<option value="${name}, ${state}, ${country}" data-lat="${latitude}" data-lon="${longitude}"></option>`;
   $("#location-options").append(option);
 }
+
+$("#location-search").select(function () {
+  console.log("The change handler ran");
+});
 
 // ---------------------
 // function fetchCoordinatesUrl(city) {
