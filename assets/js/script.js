@@ -1,7 +1,7 @@
 const apiKey = "6aa641400e3e28191b162c454ad4f43e";
 
 function fetchCityResults(searchTerm) {
-  coordinatesUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&APPID=${apiKey}`;
+  const coordinatesUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&APPID=${apiKey}`;
   return fetch(coordinatesUrl).then(function (response) {
     return response.json();
   });
@@ -33,7 +33,10 @@ $("#location-search").on("input", function () {
     for (let i = 0; i < $(options).length; i++) {
       let currentOption = $(options)[i];
       if ($(currentOption).attr("value") === inputValue) {
-        console.log("We found a match!");
+        $("#location-search").blur();
+        const latitude = $(currentOption).attr("data-lat");
+        const longitude = $(currentOption).attr("data-lon");
+        console.log(fetchForecast(latitude, longitude));
       }
     }
   }
@@ -48,26 +51,12 @@ $("#location-search").select(function () {
   console.log("The change handler ran");
 });
 
-// ---------------------
-// function fetchCoordinatesUrl(city) {
-//   url =
-//     "http://api.openweathermap.org/geo/1.0/direct?q=" +
-//     city +
-//     "&APPID=" +
-//     apiKey;
-//   return url;
-// }
-
-// function fetchForecastUrl(latitude, longitude) {
-//   var url =
-//     "http://api.openweathermap.org/data/2.5/forecast?lat=" +
-//     latitude +
-//     "&lon=" +
-//     longitude +
-//     "&APPID=" +
-//     apiKey;
-//   return url;
-// }
+function fetchForecast(latitude, longitude) {
+  const weatherUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&APPID=${apiKey}`;
+  return fetch(weatherUrl).then(function (response) {
+    return response.json();
+  });
+}
 
 // function getCoordinates(event) {
 //   fetch(fetchCoordinatesUrl($("#city-entry").val()))
