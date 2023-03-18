@@ -35,3 +35,9 @@ html, body, main, .columns {
 img {
     float: left;
 }
+
+#now > img {
+    background: lightgray;
+    border-radius: 12px;
+    margin: 8px;
+}

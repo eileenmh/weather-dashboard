@@ -71,6 +71,12 @@ function getWeather(latitude, longitude) {
   fetchCurrentWeather().then(function (data) {
     console.log(data);
     $("#now")
+      .children("img")
+      .attr(
+        "src",
+        `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+      );
+    $("#now")
       .children(".temp")
       .html(`${Math.round(data.main.temp)}°`);
     $("#now")
@@ -108,7 +114,7 @@ function getWeather(latitude, longitude) {
       const windArray = sameDate.map((data) => data.wind.speed);
       const humidArray = sameDate.map((data) => data.main.humidity);
       const iconArray = dayTime.map((data) => data.weather[0].icon);
-      console.log(findMostFrequent(iconArray));
+      let mostFrequentIcon = findMostFrequent(iconArray);
 
       // update Day Card
       const dayCard = `#daycard-${i}`;
@@ -117,9 +123,9 @@ function getWeather(latitude, longitude) {
         .children("img")
         .attr(
           "src",
-          `https://openweathermap.org/img/wn/${findMostFrequent(
-            iconArray
-          )}@2x.png`
+          `https://openweathermap.org/img/wn/${
+            mostFrequentIcon === undefined ? iconArray[0] : mostFrequentIcon
+          }@2x.png`
         );
       $(dayCard)
         .children(".temp")
@@ -158,26 +164,22 @@ function getAverage(array) {
 }
 
 function findMostFrequent(arr) {
-  if (arr.length > 2) {
-    let mf = 1;
-    let m = 0;
-    let item;
+  let mf = 1;
+  let m = 0;
+  let item;
 
-    for (let i = 0; i < arr.length; i++) {
-      for (let j = i; j < arr.length; j++) {
-        if (arr[i] == arr[j]) {
-          m++;
-          if (m > mf) {
-            mf = m;
-            item = arr[i];
-          }
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i; j < arr.length; j++) {
+      if (arr[i] == arr[j]) {
+        m++;
+        if (m > mf) {
+          mf = m;
+          item = arr[i];
         }
       }
-      m = 0;
     }
-
-    return item;
-  } else {
-    return arr[1];
+    m = 0;
   }
+
+  return item;
 }
