@@ -1,81 +1,76 @@
 const apiKey = "6aa641400e3e28191b162c454ad4f43e";
 
-function fetchCityResults(searchTerm) {
-  const coordinatesUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&APPID=${apiKey}`;
-  return fetch(coordinatesUrl).then(function (response) {
-    return response.json();
-  });
-}
-/* SEARCH LOCATION
- */
-// Event listener on location search input
-$("#location-search").on("input", function () {
-  let inputValue = $(this).val();
-  let optionsList = $("#location-options");
-
-  if (inputValue.length > 2) {
-    fetchCityResults(inputValue).then(function (data) {
-      // clear options in datalist
-      optionsList.empty();
-      for (let i = 0; i < data.length; i++) {
-        createSearchOption(
-          data[i].name,
-          data[i].state,
-          data[i].country,
-          data[i].lat,
-          data[i].lon
-        );
-      }
+// contains all search-related functions
+function runSearch(searchTerm) {
+  // get coordinates by location name
+  function fetchCityResults(query) {
+    const coordinatesUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&APPID=${apiKey}`;
+    return fetch(coordinatesUrl).then(function (response) {
+      return response.json();
     });
   }
-  if ($(optionsList).children().length > 0) {
-    let options = $(optionsList).children();
-    for (let i = 0; i < $(options).length; i++) {
-      let currentOption = $(options)[i];
-      if ($(currentOption).attr("value") === inputValue) {
-        $("#location-search").blur();
-        const latitude = $(currentOption).attr("data-lat");
-        const longitude = $(currentOption).attr("data-lon");
-        console.log(fetchForecast(latitude, longitude));
-      }
+
+  // if the search term has more than two characters, fetch city results from api then run createLocationOptions
+  if (searchTerm.length > 2) {
+    fetchCityResults(searchTerm).then(function (data) {
+      createLocationOptions(data);
+    });
+  }
+
+  // create datalist options from api results
+  function createLocationOptions(apiCityData) {
+    // clear current options in datalist
+    $("#location-options").empty();
+
+    // create an option and append to datalist
+    function createOption(name, state, country, latitude, longitude) {
+      let option = `<option value="${name}, ${state}, ${country}" data-lat="${latitude}" data-lon="${longitude}"></option>`;
+      $("#location-options").append(option);
+    }
+
+    // create and and append option for each data result
+    for (let i = 0; i < apiCityData.length; i++) {
+      createOption(
+        apiCityData[i].name,
+        apiCityData[i].state,
+        apiCityData[i].country,
+        apiCityData[i].lat,
+        apiCityData[i].lon
+      );
     }
   }
-});
-
-function createSearchOption(name, state, country, latitude, longitude) {
-  let option = `<option value="${name}, ${state}, ${country}" data-lat="${latitude}" data-lon="${longitude}"></option>`;
-  $("#location-options").append(option);
 }
 
-$("#location-search").select(function () {
-  console.log("The change handler ran");
-});
+// check if input value matches an option value, if it does then getWeather and storeLocationData
+function checkForMatch(searchTerm) {
+  const options = $("#location-options").children();
+  for (let i = 0; i < options.length; i++) {
+    const currentOption = options[i];
+    if ($(currentOption).attr("value") === searchTerm) {
+      const cityLat = $(currentOption).attr("data-lat");
+      const cityLon = $(currentOption).attr("data-lon");
+      getWeather(cityLat, cityLon);
+      $("#location-search").blur();
+    }
+  }
+}
 
-function fetchForecast(latitude, longitude) {
-  const weatherUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&APPID=${apiKey}`;
-  return fetch(weatherUrl).then(function (response) {
-    return response.json();
+function getWeather(latitude, longitude) {
+  // get 5-day forecast
+  function fetchForecast() {
+    const weatherUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&APPID=${apiKey}`;
+    return fetch(weatherUrl).then(function (response) {
+      return response.json();
+    });
+  }
+  fetchForecast().then(function (data) {
+    console.log(data);
   });
 }
 
-// function getCoordinates(event) {
-//   fetch(fetchCoordinatesUrl($("#city-entry").val()))
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       getWeather(data);
-//     });
-// }
-
-// function getWeather(data) {
-//   fetch(fetchForecastUrl(data[0].lat, data[0].lon))
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       console.log(data);
-//     });
-// }
-
-// $("#city-search-btn").click(getCoordinates);
+// Event listener on location-search input
+$("#location-search").on("input", function () {
+  const inputValue = $(this).val();
+  runSearch(inputValue);
+  checkForMatch(inputValue);
+});
