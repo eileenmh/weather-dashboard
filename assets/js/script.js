@@ -69,9 +69,16 @@ function getWeather(latitude, longitude) {
 
   // process current weather data
   fetchCurrentWeather().then(function (data) {
+    console.log(data);
     $("#now")
       .children(".temp")
-      .text(`${Math.round(data.main.temp)}°`);
+      .html(`${Math.round(data.main.temp)}°`);
+    $("#now")
+      .children(".wind")
+      .html(`<b>Wind Speed:</b> ${Math.round(data.wind.speed)} MPH`);
+    $("#now")
+      .children(".humid")
+      .html(`<b>Humidity:</b> ${data.main.humidity}%`);
   });
 
   // get 5-day forecast
