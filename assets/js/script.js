@@ -59,6 +59,21 @@ function checkForMatch(searchTerm) {
 }
 
 function getWeather(latitude, longitude) {
+  // get current weather
+  function fetchCurrentWeather() {
+    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${apiKey}&units=imperial`;
+    return fetch(currentUrl).then(function (response) {
+      return response.json();
+    });
+  }
+
+  // process current weather data
+  fetchCurrentWeather().then(function (data) {
+    $("#now")
+      .children(".temp")
+      .text(`${Math.round(data.main.temp)}°`);
+  });
+
   // get 5-day forecast
   function fetchForecast() {
     const weatherUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&APPID=${apiKey}&units=imperial`;
@@ -66,6 +81,7 @@ function getWeather(latitude, longitude) {
       return response.json();
     });
   }
+
   // process forecast data
   fetchForecast().then(function (data) {
     console.log(data);
