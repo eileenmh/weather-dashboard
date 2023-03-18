@@ -66,11 +66,13 @@ function getWeather(latitude, longitude) {
   fetchForecast().then(function (data) {
     const forecastData = data.list;
     console.log(forecastData);
-    const tomorrow = dayjs().add(1, "day");
-    const sameDate = forecastData.filter((data) =>
-      dayjs(data.dt_txt + " UTC").isSame(tomorrow, "day")
-    );
-    console.log(sameDate);
+    for (let i = 0; i < 5; i++) {
+      const currentDate = dayjs().add(i, "day");
+      const sameDate = forecastData.filter((data) =>
+        dayjs(data.dt_txt + " UTC").isSame(currentDate, "day")
+      );
+      console.log(currentDate, sameDate);
+    }
   });
 }
 
