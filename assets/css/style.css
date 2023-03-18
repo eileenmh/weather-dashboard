@@ -18,3 +18,7 @@
     font-weight: 800;
     font-size: 1.1rem;
 }
+
+#recent-searches-container {
+    border-top: solid black 2px;
+}

@@ -58,20 +58,25 @@ function checkForMatch(searchTerm) {
 function getWeather(latitude, longitude) {
   // get 5-day forecast
   function fetchForecast() {
-    const weatherUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&APPID=${apiKey}`;
+    const weatherUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&APPID=${apiKey}&units=imperial`;
     return fetch(weatherUrl).then(function (response) {
       return response.json();
     });
   }
+  // process forecast data
   fetchForecast().then(function (data) {
     const forecastData = data.list;
-    console.log(forecastData);
-    for (let i = 0; i < 5; i++) {
+    for (let i = 1; i < 6; i++) {
       const currentDate = dayjs().add(i, "day");
+      console.log(currentDate.format("DD/MM/YYYY"));
       const sameDate = forecastData.filter((data) =>
         dayjs(data.dt_txt + " UTC").isSame(currentDate, "day")
       );
-      console.log(currentDate, sameDate);
+      const tempArray = sameDate.map((data) => data.main.temp).sort();
+      const tempHigh = tempArray[tempArray.length - 1];
+      const tempLow = tempArray[0];
+      console.log(`High of: ${tempHigh}`);
+      console.log(`Low of: ${tempLow}`);
     }
   });
 }
