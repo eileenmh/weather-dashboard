@@ -1,4 +1,5 @@
 const apiKey = "6aa641400e3e28191b162c454ad4f43e";
+$(".day").children("h4").addClass("has-text-info-dark");
 
 // contains all search-related functions
 function runSearch(searchTerm) {
@@ -67,16 +68,16 @@ function getWeather(latitude, longitude) {
   fetchForecast().then(function (data) {
     const forecastData = data.list;
     for (let i = 1; i < 6; i++) {
+      const dayCard = `#daycard-${i}`;
       const currentDate = dayjs().add(i, "day");
-      console.log(currentDate.format("DD/MM/YYYY"));
       const sameDate = forecastData.filter((data) =>
         dayjs(data.dt_txt + " UTC").isSame(currentDate, "day")
       );
       const tempArray = sameDate.map((data) => data.main.temp).sort();
-      const tempHigh = tempArray[tempArray.length - 1];
-      const tempLow = tempArray[0];
-      console.log(`High of: ${tempHigh}`);
-      console.log(`Low of: ${tempLow}`);
+      const tempHigh = Math.round(tempArray[tempArray.length - 1]);
+      const tempLow = Math.round(tempArray[0]);
+      $(dayCard).children("h4").text(currentDate.format("ddd, MMM D"));
+      $(dayCard).children(".temp").html(`<b>${tempHigh}°</b>/ ${tempLow}°`);
     }
   });
 }
