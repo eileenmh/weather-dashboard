@@ -99,16 +99,9 @@ function getWeather(latitude, longitude) {
         dayjs(data.dt_txt + " UTC").isSame(currentDate, "day")
       );
       const tempArray = sameDate.map((data) => data.main.temp).sort();
-      var windAvg = () => {
-        var total = 0;
-        var count = 0;
-        const windArray = sameDate.map((data) => data.wind.speed);
-        windArray.forEach((value) => {
-          total += value;
-          count++;
-        });
-        return Math.round(total / count);
-      };
+      const windArray = sameDate.map((data) => data.wind.speed);
+      const humidArray = sameDate.map((data) => data.main.humidity);
+
       // update Day Card
       const dayCard = `#daycard-${i}`;
       $(dayCard).children("h4").text(currentDate.format("ddd, MMM D"));
@@ -119,7 +112,12 @@ function getWeather(latitude, longitude) {
             tempArray[0]
           )}°`
         );
-      $(dayCard).children(".wind").html(`<b>Wind Speed:</b> ${windAvg()} MPH`);
+      $(dayCard)
+        .children(".wind")
+        .html(`<b>Wind Speed:</b> ${getAverage(windArray)} MPH`);
+      $(dayCard)
+        .children(".humid")
+        .html(`<b>Humidity:</b> ${getAverage(humidArray)}%`);
     }
   });
 }
@@ -130,3 +128,14 @@ $("#location-search").on("input", function () {
   runSearch(inputValue);
   checkForMatch(inputValue);
 });
+
+function getAverage(array) {
+  var total = 0;
+  var count = 0;
+
+  array.forEach((value) => {
+    total += value;
+    count++;
+  });
+  return Math.round(total / count);
+}
