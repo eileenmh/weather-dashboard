@@ -51,6 +51,8 @@ function checkForMatch(searchTerm) {
       const cityLat = $(currentOption).attr("data-lat");
       const cityLon = $(currentOption).attr("data-lon");
       getWeather(cityLat, cityLon);
+      $("#location-title").text($(currentOption).attr("value"));
+      $("#timestamp").text(`As of ` + dayjs().format("h:mm A"));
       $("#location-search").blur();
     }
   }
@@ -66,6 +68,7 @@ function getWeather(latitude, longitude) {
   }
   // process forecast data
   fetchForecast().then(function (data) {
+    console.log(data);
     const forecastData = data.list;
     for (let i = 1; i < 6; i++) {
       const dayCard = `#daycard-${i}`;
