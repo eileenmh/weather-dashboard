@@ -98,11 +98,16 @@ function getWeather(latitude, longitude) {
       const sameDate = forecastData.filter((data) =>
         dayjs(data.dt_txt + " UTC").isSame(currentDate, "day")
       );
+      const dayTime = sameDate.filter(
+        (data) =>
+          dayjs(data.dt_txt + " UTC").hour() > 6 &&
+          dayjs(data.dt_txt + " UTC").hour() < 18
+      );
       console.log(sameDate);
       const tempArray = sameDate.map((data) => data.main.temp).sort();
       const windArray = sameDate.map((data) => data.wind.speed);
       const humidArray = sameDate.map((data) => data.main.humidity);
-      const iconArray = sameDate.map((data) => data.weather[0].icon);
+      const iconArray = dayTime.map((data) => data.weather[0].icon);
       console.log(findMostFrequent(iconArray));
 
       // update Day Card
@@ -153,22 +158,26 @@ function getAverage(array) {
 }
 
 function findMostFrequent(arr) {
-  let mf = 1;
-  let m = 0;
-  let item;
+  if (arr.length > 2) {
+    let mf = 1;
+    let m = 0;
+    let item;
 
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = i; j < arr.length; j++) {
-      if (arr[i] == arr[j]) {
-        m++;
-        if (m > mf) {
-          mf = m;
-          item = arr[i];
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = i; j < arr.length; j++) {
+        if (arr[i] == arr[j]) {
+          m++;
+          if (m > mf) {
+            mf = m;
+            item = arr[i];
+          }
         }
       }
+      m = 0;
     }
-    m = 0;
-  }
 
-  return item;
+    return item;
+  } else {
+    return arr[1];
+  }
 }
