@@ -94,16 +94,32 @@ function getWeather(latitude, longitude) {
     console.log(data);
     const forecastData = data.list;
     for (let i = 1; i < 6; i++) {
-      const dayCard = `#daycard-${i}`;
       const currentDate = dayjs().add(i, "day");
       const sameDate = forecastData.filter((data) =>
         dayjs(data.dt_txt + " UTC").isSame(currentDate, "day")
       );
       const tempArray = sameDate.map((data) => data.main.temp).sort();
-      const tempHigh = Math.round(tempArray[tempArray.length - 1]);
-      const tempLow = Math.round(tempArray[0]);
+      var windAvg = () => {
+        var total = 0;
+        var count = 0;
+        const windArray = sameDate.map((data) => data.wind.speed);
+        windArray.forEach((value) => {
+          total += value;
+          count++;
+        });
+        return Math.round(total / count);
+      };
+      // update Day Card
+      const dayCard = `#daycard-${i}`;
       $(dayCard).children("h4").text(currentDate.format("ddd, MMM D"));
-      $(dayCard).children(".temp").html(`<b>${tempHigh}°</b>/ ${tempLow}°`);
+      $(dayCard)
+        .children(".temp")
+        .html(
+          `<b>${Math.round(tempArray[tempArray.length - 1])}°</b>/ ${Math.round(
+            tempArray[0]
+          )}°`
+        );
+      $(dayCard).children(".wind").html(`<b>Wind Speed:</b> ${windAvg()} MPH`);
     }
   });
 }
