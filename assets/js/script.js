@@ -98,13 +98,24 @@ function getWeather(latitude, longitude) {
       const sameDate = forecastData.filter((data) =>
         dayjs(data.dt_txt + " UTC").isSame(currentDate, "day")
       );
+      console.log(sameDate);
       const tempArray = sameDate.map((data) => data.main.temp).sort();
       const windArray = sameDate.map((data) => data.wind.speed);
       const humidArray = sameDate.map((data) => data.main.humidity);
+      const iconArray = sameDate.map((data) => data.weather[0].icon);
+      console.log(findMostFrequent(iconArray));
 
       // update Day Card
       const dayCard = `#daycard-${i}`;
       $(dayCard).children("h4").text(currentDate.format("ddd, MMM D"));
+      $(dayCard)
+        .children("img")
+        .attr(
+          "src",
+          `https://openweathermap.org/img/wn/${findMostFrequent(
+            iconArray
+          )}@2x.png`
+        );
       $(dayCard)
         .children(".temp")
         .html(
@@ -119,6 +130,7 @@ function getWeather(latitude, longitude) {
         .children(".humid")
         .html(`<b>Humidity:</b> ${getAverage(humidArray)}%`);
     }
+    $("#weather-container").children("section").removeClass("hide");
   });
 }
 
@@ -138,4 +150,25 @@ function getAverage(array) {
     count++;
   });
   return Math.round(total / count);
+}
+
+function findMostFrequent(arr) {
+  let mf = 1;
+  let m = 0;
+  let item;
+
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i; j < arr.length; j++) {
+      if (arr[i] == arr[j]) {
+        m++;
+        if (m > mf) {
+          mf = m;
+          item = arr[i];
+        }
+      }
+    }
+    m = 0;
+  }
+
+  return item;
 }
