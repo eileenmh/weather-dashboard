@@ -65,6 +65,7 @@ function getWeather(latitude, longitude) {
   }
   fetchForecast().then(function (data) {
     console.log(data);
+    console.log(Date.parse(data.list[0].dt_txt + " UTC"));
   });
 }
 
