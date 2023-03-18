@@ -64,8 +64,13 @@ function getWeather(latitude, longitude) {
     });
   }
   fetchForecast().then(function (data) {
-    console.log(data);
-    console.log(Date.parse(data.list[0].dt_txt + " UTC"));
+    const forecastData = data.list;
+    console.log(forecastData);
+    const tomorrow = dayjs().add(1, "day");
+    const sameDate = forecastData.filter((data) =>
+      dayjs(data.dt_txt + " UTC").isSame(tomorrow, "day")
+    );
+    console.log(sameDate);
   });
 }
 
