@@ -5,7 +5,7 @@ $(".day").children("h4").addClass("has-text-info-dark");
 function runSearch(searchTerm) {
   // get coordinates by location name
   function fetchCityResults(query) {
-    const coordinatesUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&APPID=${apiKey}`;
+    const coordinatesUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&APPID=${apiKey}`;
     return fetch(coordinatesUrl).then(function (response) {
       return response.json();
     });
@@ -89,7 +89,7 @@ function getWeather(latitude, longitude) {
 
   // get 5-day forecast
   function fetchForecast() {
-    const weatherUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&APPID=${apiKey}&units=imperial`;
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&APPID=${apiKey}&units=imperial`;
     return fetch(weatherUrl).then(function (response) {
       return response.json();
     });
