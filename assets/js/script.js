@@ -1,8 +1,30 @@
 const apiKey = "6aa641400e3e28191b162c454ad4f43e";
 $(".day").children("h4").addClass("has-text-info-dark");
+const savedLocations = JSON.parse(localStorage.getItem("saved-locations"));
 
-let savedLocations = JSON.parse(localStorage.getItem("saved-locations")) || [];
-console.log(savedLocations);
+// load recent searches
+function loadSearches() {
+  console.log("load searches is running");
+  console.log(savedLocations);
+  $("#search-list").empty();
+  if (savedLocations) {
+    for (let i = 0; i < savedLocations.length; i++) {
+      $("#search-list").append(
+        `<li data-lat=${savedLocations[i].lat} data-lon=${savedLocations[i].lon}><a href="#">${savedLocations[i].name}</a></li>`
+      );
+    }
+  }
+}
+
+// event listener on recent searches list items
+$("#search-list").on("click", "li", function (event) {
+  event.preventDefault();
+  const name = $(this).text();
+  const lat = $(this).attr("data-lat");
+  const lon = $(this).attr("data-lon");
+  getWeather(name, lat, lon);
+  updateStorage(name, lat, lon);
+});
 
 // contains all search-related functions
 function runSearch(searchTerm) {
@@ -47,59 +69,60 @@ function runSearch(searchTerm) {
 
 // check if input value matches an option value, if it does then getWeather and storeLocationData
 function checkForMatch(searchTerm) {
-  // constructor function - Location
-  function Location(name, latitude, longitude) {
-    this.name = name;
-    this.lat = latitude;
-    this.lon = longitude;
-  }
-
-  const uniqueLocations = savedLocations.filter(
-    (obj, index) =>
-      savedLocations.findIndex((item) => item.name === obj.name) === index
-  );
-
   const options = $("#location-options").children();
   for (let i = 0; i < options.length; i++) {
     const currentOption = options[i];
     if ($(currentOption).attr("value") === searchTerm) {
-      const cityLat = $(currentOption).attr("data-lat");
-      const cityLon = $(currentOption).attr("data-lon");
-      getWeather(cityLat, cityLon);
-      const newLocation = new Location(
-        $(currentOption).attr("value"),
-        $(currentOption).attr("data-lat"),
-        $(currentOption).attr("data-lon")
-      );
-
-      const duplicateSearch = function () {
-        function isSame(obj) {
-          if (obj.name === $(currentOption).attr("value")) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-
-        return savedLocations.findIndex(isSame);
-      };
-
-      if (duplicateSearch() === -1) {
-        savedLocations.unshift(newLocation);
-      } else {
-        savedLocations.splice(duplicateSearch());
-        savedLocations.unshift(newLocation);
-      }
-
-      localStorage.setItem("saved-locations", JSON.stringify(savedLocations));
-      $("#location-title").text($(currentOption).attr("value"));
-      $("#timestamp").text(`As of ` + dayjs().format("h:mm A"));
+      const name = $(currentOption).attr("value");
+      const lat = $(currentOption).attr("data-lat");
+      const lon = $(currentOption).attr("data-lat");
+      getWeather(name, lat, lon);
+      updateStorage(name, lat, lon);
       $("#location-search").blur();
     }
   }
 }
 
-function getWeather(latitude, longitude) {
+function updateStorage(name, latitude, longitude) {
+  // create location object
+  let newLocation = {
+    name: name,
+    lat: latitude,
+    lon: longitude,
+  };
+
+  // if object already exists in array, get the index
+  const duplicateSearch = function () {
+    function isSame(obj) {
+      if (obj.name === name) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return savedLocations.findIndex(isSame);
+  };
+
+  if (duplicateSearch() === -1) {
+    // if no duplicate, add new location to array
+    savedLocations.unshift(newLocation);
+  } else {
+    // if there is a duplicate, remove the old object and then re-add location to array
+    savedLocations.splice(duplicateSearch());
+    savedLocations.unshift(newLocation);
+  }
+
+  // update local storage
+  localStorage.setItem("saved-locations", JSON.stringify(savedLocations));
+
+  // refresh recent searches list
+  loadSearches();
+}
+
+function getWeather(cityName, latitude, longitude) {
+  $("#location-title").text(cityName);
+  $("#timestamp").text(`As of ` + dayjs().format("h:mm A"));
+
   // get current weather
   function fetchCurrentWeather() {
     const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${apiKey}&units=imperial`;
@@ -221,3 +244,5 @@ function findMostFrequent(arr) {
 
   return item;
 }
+
+loadSearches();
