@@ -1,6 +1,8 @@
 const apiKey = "6aa641400e3e28191b162c454ad4f43e";
 $(".day").children("h4").addClass("has-text-info-dark");
 
+let savedLocations = [];
+
 // contains all search-related functions
 function runSearch(searchTerm) {
   // get coordinates by location name
@@ -44,6 +46,13 @@ function runSearch(searchTerm) {
 
 // check if input value matches an option value, if it does then getWeather and storeLocationData
 function checkForMatch(searchTerm) {
+  // constructor function - Location
+  function Location(name, latitude, longitude) {
+    this.name = name;
+    this.lat = latitude;
+    this.lon = longitude;
+  }
+
   const options = $("#location-options").children();
   for (let i = 0; i < options.length; i++) {
     const currentOption = options[i];
@@ -51,6 +60,13 @@ function checkForMatch(searchTerm) {
       const cityLat = $(currentOption).attr("data-lat");
       const cityLon = $(currentOption).attr("data-lon");
       getWeather(cityLat, cityLon);
+      const newLocation = new Location(
+        $(currentOption).attr("value"),
+        $(currentOption).attr("data-lat"),
+        $(currentOption).attr("data-lon")
+      );
+      savedLocations.push(newLocation);
+      console.log(savedLocations);
       $("#location-title").text($(currentOption).attr("value"));
       $("#timestamp").text(`As of ` + dayjs().format("h:mm A"));
       $("#location-search").blur();
@@ -69,7 +85,6 @@ function getWeather(latitude, longitude) {
 
   // process current weather data
   fetchCurrentWeather().then(function (data) {
-    console.log(data);
     $("#now")
       .children("img")
       .attr(
@@ -97,7 +112,6 @@ function getWeather(latitude, longitude) {
 
   // process forecast data
   fetchForecast().then(function (data) {
-    console.log(data);
     const forecastData = data.list;
     for (let i = 1; i < 6; i++) {
       const currentDate = dayjs().add(i, "day");
@@ -109,7 +123,6 @@ function getWeather(latitude, longitude) {
           dayjs(data.dt_txt + " UTC").hour() > 6 &&
           dayjs(data.dt_txt + " UTC").hour() < 18
       );
-      console.log(sameDate);
       const tempArray = sameDate.map((data) => data.main.temp).sort();
       const windArray = sameDate.map((data) => data.wind.speed);
       const humidArray = sameDate.map((data) => data.main.humidity);
