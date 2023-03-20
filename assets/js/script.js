@@ -1,7 +1,8 @@
 const apiKey = "6aa641400e3e28191b162c454ad4f43e";
 $(".day").children("h4").addClass("has-text-info-dark");
 
-let savedLocations = [];
+let savedLocations = JSON.parse(localStorage.getItem("saved-locations")) || [];
+console.log(savedLocations);
 
 // contains all search-related functions
 function runSearch(searchTerm) {
@@ -53,6 +54,11 @@ function checkForMatch(searchTerm) {
     this.lon = longitude;
   }
 
+  const uniqueLocations = savedLocations.filter(
+    (obj, index) =>
+      savedLocations.findIndex((item) => item.name === obj.name) === index
+  );
+
   const options = $("#location-options").children();
   for (let i = 0; i < options.length; i++) {
     const currentOption = options[i];
@@ -65,8 +71,27 @@ function checkForMatch(searchTerm) {
         $(currentOption).attr("data-lat"),
         $(currentOption).attr("data-lon")
       );
-      savedLocations.push(newLocation);
-      console.log(savedLocations);
+
+      const duplicateSearch = function () {
+        function isSame(obj) {
+          if (obj.name === $(currentOption).attr("value")) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+
+        return savedLocations.findIndex(isSame);
+      };
+
+      if (duplicateSearch() === -1) {
+        savedLocations.unshift(newLocation);
+      } else {
+        savedLocations.splice(duplicateSearch());
+        savedLocations.unshift(newLocation);
+      }
+
+      localStorage.setItem("saved-locations", JSON.stringify(savedLocations));
       $("#location-title").text($(currentOption).attr("value"));
       $("#timestamp").text(`As of ` + dayjs().format("h:mm A"));
       $("#location-search").blur();
