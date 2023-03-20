@@ -5,18 +5,17 @@ html, body, main, .columns {
 #weather-container {
     border: gray solid 2px;
     border-radius: 12px;
-    height: auto;
+    padding: 20px;
 }
 
 .day {
     background-color: lightgray;
     border-radius: 12px;
     padding: 8px;
-    margin-top: 8px;
-}
-
-.day:not(:last-of-type) {
-    margin-right: 8px;
+    margin: 4px;
+    min-width: 180px;
+    max-width: 250px;
+    display: block;
 }
 
 .day > h4 {
@@ -40,4 +39,35 @@ img {
     background: lightgray;
     border-radius: 12px;
     margin: 8px;
+}
+
+#five-day {
+    width: 100%;
+    margin: auto;
+}
+
+@media only screen and (min-width: 887px) {
+    #weather-container {
+        height: 75%;
+    }
+
+    .day:not(:last-of-type) {
+        margin-right: 8px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .day {
+        width: 250px;
+        margin: 4px auto 4px auto;
+    }
+
+    h3 {
+        width: 250px;
+        margin: auto;
+    }
+
+    #weather-container {
+        min-height: 50%;
+    }
 }
