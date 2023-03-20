@@ -10,9 +10,18 @@ function loadSearches() {
     for (let i = 0; i < savedLocations.length; i++) {
       if (i < 10) {
         $("#search-list").append(
-          `<li data-lat=${savedLocations[i].lat} data-lon=${savedLocations[i].lon}><a href="#">${savedLocations[i].name}</a></li>`
+          `<li value="${savedLocations[i].name}" data-lat="${savedLocations[i].lat}" data-lon="${savedLocations[i].lon}"><a href="#">${savedLocations[i].name}</a></li>`
         );
       }
+    }
+    const listItems = $("#search-list").children("li");
+    for (let i = 0; i < listItems.length; i++) {
+      fetchCurrentWeather(
+        $(listItems[i]).attr("data-lat"),
+        $(listItems[i]).attr("data-lon")
+      ).then(function (data) {
+        $(listItems[i]).append(` · ${Math.round(data.main.temp)}°`);
+      });
     }
   }
 }
@@ -20,7 +29,7 @@ function loadSearches() {
 // event listener on recent searches list items
 $("#search-list").on("click", "li", function (event) {
   event.preventDefault();
-  const name = $(this).text();
+  const name = $(this).attr("value");
   const lat = $(this).attr("data-lat");
   const lon = $(this).attr("data-lon");
   getWeather(name, lat, lon);
@@ -114,20 +123,20 @@ function updateStorage(name, latitude, longitude) {
   loadSearches();
 }
 
+// get current weather
+function fetchCurrentWeather(latitude, longitude) {
+  const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${apiKey}&units=imperial`;
+  return fetch(currentUrl).then(function (response) {
+    return response.json();
+  });
+}
+
 function getWeather(cityName, latitude, longitude) {
   $("#location-title").text(cityName);
   $("#timestamp").text(`As of ` + dayjs().format("h:mm A"));
 
-  // get current weather
-  function fetchCurrentWeather() {
-    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${apiKey}&units=imperial`;
-    return fetch(currentUrl).then(function (response) {
-      return response.json();
-    });
-  }
-
   // process current weather data
-  fetchCurrentWeather().then(function (data) {
+  fetchCurrentWeather(latitude, longitude).then(function (data) {
     $("#now")
       .children("img")
       .attr(

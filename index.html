@@ -19,13 +19,11 @@
             <div class="columns m-2">
             <section class="column is-one-quarter pt-0" id="location-container">
                     <label for="city-entry" class="label">Search for a city:</label>
-                <div class="field has-addons">
-                    <div class="control is-expanded">
+                    <div class="control is-expanded mb-4">
                         <input list="location-options" class="input is-fullwidth" type="text" id="location-search" name="city-entry">
+                        <datalist id="location-options">
+                        </datalist>
                     </div>
-                    <datalist id="location-options">
-                    </datalist>
-                </div>
                 <div id="recent-searches-container">
                 <h2 class="title is-size-5 mt-5 is-underlined">Recent Searches</h2>
                 <ul id="search-list">
