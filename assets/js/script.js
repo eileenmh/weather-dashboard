@@ -1,17 +1,18 @@
 const apiKey = "6aa641400e3e28191b162c454ad4f43e";
 $(".day").children("h4").addClass("has-text-info-dark");
-const savedLocations = JSON.parse(localStorage.getItem("saved-locations"));
+const savedLocations =
+  JSON.parse(localStorage.getItem("saved-locations")) || [];
 
 // load recent searches
 function loadSearches() {
-  console.log("load searches is running");
-  console.log(savedLocations);
   $("#search-list").empty();
   if (savedLocations) {
     for (let i = 0; i < savedLocations.length; i++) {
-      $("#search-list").append(
-        `<li data-lat=${savedLocations[i].lat} data-lon=${savedLocations[i].lon}><a href="#">${savedLocations[i].name}</a></li>`
-      );
+      if (i < 10) {
+        $("#search-list").append(
+          `<li data-lat=${savedLocations[i].lat} data-lon=${savedLocations[i].lon}><a href="#">${savedLocations[i].name}</a></li>`
+        );
+      }
     }
   }
 }
@@ -91,24 +92,18 @@ function updateStorage(name, latitude, longitude) {
     lon: longitude,
   };
 
-  // if object already exists in array, get the index
-  const duplicateSearch = function () {
-    function isSame(obj) {
-      if (obj.name === name) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return savedLocations.findIndex(isSame);
-  };
+  const nameArray = savedLocations.map(function (location) {
+    return location.name;
+  });
 
-  if (duplicateSearch() === -1) {
+  const findDuplicate = nameArray.indexOf(newLocation.name);
+
+  if (findDuplicate === -1) {
     // if no duplicate, add new location to array
     savedLocations.unshift(newLocation);
   } else {
     // if there is a duplicate, remove the old object and then re-add location to array
-    savedLocations.splice(duplicateSearch());
+    savedLocations.splice(findDuplicate, 1);
     savedLocations.unshift(newLocation);
   }
 
