@@ -1,16 +1,15 @@
-Build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
+# Weather Dashboard
 
+For this week's challenge, we were asked to create a weather dashboard that retrieves relevant weather data from OpenWeatherAPI based on a user-entered location. The top part of the dashboard shows the current weather conditions, and the bottom half shows the 5-day forecast. After a user searches for a location, that location is saved in local storage and presented upon later page reloads. Saved locations can be clicked to load that locations weather.
+
+The application can be accessed here: https://eileenmh.github.io/weather-dashboard/
+
+The following image shows the web application's appearance and functionality:
 ![weather-dashboard](/assets/images/weather-dashboard-snapshot.png)
 
-## User Story
-
-```md
-AS A traveler
-I WANT to see the weather outlook for multiple cities
-SO THAT I can plan a trip accordingly
-```
-
 ## Acceptance Criteria
+
+We were provided with the following acceptance criteria:
 
 ```md
 GIVEN a weather dashboard with form inputs
@@ -23,3 +22,18 @@ THEN I am presented with a 5-day forecast that displays the date, an icon repres
 WHEN I click on a city in the search history
 THEN I am again presented with current and future conditions for that city
 ```
+
+## Built With
+
+- HTML
+- CSS
+- JavaScript
+- [Bulma](https://bulma.io/)
+- [jQuery](https://jquery.com/)
+- [Day.js](https://day.js.org/)
+
+## Credits
+
+- Project prompt provided by [UNC Coding Bootcamp](https://bootcamp.unc.edu/coding/)
+- Created by Eileen Harvey ([@eileenmh](https://github.com/eileenmh))
+- API by [OpenWeather](https://openweathermap.org/api)
