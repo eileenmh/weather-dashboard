@@ -37,3 +37,7 @@ THEN I am again presented with current and future conditions for that city
 - Project prompt provided by [UNC Coding Bootcamp](https://bootcamp.unc.edu/coding/)
 - Created by Eileen Harvey ([@eileenmh](https://github.com/eileenmh))
 - API by [OpenWeather](https://openweathermap.org/api)
+
+## Acknowledgements
+
+- JavaScript function `findMostFrequent(arr)` taken and adapted from [w3resource](https://www.w3resource.com/javascript-exercises/javascript-array-exercise-8.php)
