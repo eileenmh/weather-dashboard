@@ -25,9 +25,6 @@ THEN I am again presented with current and future conditions for that city
 
 ## Built With
 
-- HTML
-- CSS
-- JavaScript
 - [Bulma](https://bulma.io/)
 - [jQuery](https://jquery.com/)
 - [Day.js](https://day.js.org/)
