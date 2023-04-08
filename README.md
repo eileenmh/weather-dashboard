@@ -1,5 +1,7 @@
 Build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
 
+![weather-dashboard](/assets/images/weather-dashboard-snapshot.png)
+
 ## User Story
 
 ```md

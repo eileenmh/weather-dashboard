@@ -20,9 +20,11 @@ function loadSearches() {
         $(listItems[i]).attr("data-lat"),
         $(listItems[i]).attr("data-lon")
       ).then(function (data) {
+        console.log(`loop:`, i);
         $(listItems[i]).append(` · ${Math.round(data.main.temp)}°`);
       });
     }
+    console.log(`this is after the loop`);
   }
 }
 
